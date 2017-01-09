@@ -39,7 +39,7 @@ extension URLRequest {
      
      - returns: initialized URLRequest
      */
-    static func createWithHTReq(request: HTReq) -> URLRequest {
+    static func createWithHTReq(_ request: HTReq) -> URLRequest {
         var urlReq = URLRequest(url: URL(string: request.url!)!)
         urlReq.httpMethod = request.method
         urlReq.allowsCellularAccess = request.cellular
@@ -47,7 +47,7 @@ extension URLRequest {
         if (request.timeout > 0) {
             urlReq.timeoutInterval = Double(request.timeout)
         }
-        for (key,value) in request.headers! {
+        for (key,value) in request.headers ?? Dictionary() {
             urlReq.setValue(value, forHTTPHeaderField: key)
         }
         return urlReq
@@ -104,8 +104,7 @@ open class HTClient {
      */
     @discardableResult
     open static func dispatch(_ request: HTReq, urlSession:URLSession=URLSession.shared, handler: @escaping HTResponseCallback) -> URLSessionDataTask {
-        let req = URLRequest(url: URL(string: request.url!)!)
-        
+        let req = URLRequest.createWithHTReq(request)
         let task = urlSession.dataTask(with: req as URLRequest, completionHandler: { (data, response, error) in
             handler(data, (response as! HTTPURLResponse).statusCode, error as NSError?)
         })
