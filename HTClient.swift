@@ -88,6 +88,7 @@ open class HTClient {
      
      - returns: The data task representation of the request.
      */
+    @discardableResult
     open func dispatch(_ request: HTReq, handler: @escaping HTResponseCallback) -> URLSessionDataTask {
         return HTClient.dispatch(request, urlSession:self.urlSession!, handler:handler)
     }
@@ -101,6 +102,7 @@ open class HTClient {
      
      - returns: The data task representation of the request.
      */
+    @discardableResult
     open static func dispatch(_ request: HTReq, urlSession:URLSession=URLSession.shared, handler: @escaping HTResponseCallback) -> URLSessionDataTask {
         let req = URLRequest(url: URL(string: request.url!)!)
         
